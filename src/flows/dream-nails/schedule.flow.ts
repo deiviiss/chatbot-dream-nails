@@ -73,13 +73,13 @@ const flowSchedule = addKeyword(EVENTS.ACTION)
     // Calling custom API to get AI response
     const userMessage = ctx.body; // The user's message that needs to be answered
 
-    const text = await getAIResponse(`${promptSchedule}Cliente pregunta: ${userMessage}`);
+    const assistantReply = await getAIResponse(`${promptSchedule}Cliente pregunta: ${userMessage}`);
 
     // Managing chat history
-    await handleHistory({ content: text, role: 'assistant' }, state);
+    await handleHistory({ content: assistantReply, role: 'assistant' }, state);
 
     // Split the response into chunks and send them with a small delay between each one
-    const chunks = text.split(/(?<!\d)\.\s+/g); // Divide by periods followed by a space
+    const chunks = assistantReply.split(/(?<!\d)\.\s+/g); // Divide by periods followed by a space
     for (const chunk of chunks) {
       await flowDynamic([{ body: chunk.trim(), delay: generateTimer(150, 250) }]);
     }

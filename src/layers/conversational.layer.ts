@@ -1,9 +1,7 @@
 import { BotContext, BotMethods } from "@bot-whatsapp/bot/dist/types";
 import { handleHistory } from "../utils/handleHistory";
 
-/**
- * Su funcion es almancenar en el state todos los mensajes que el usuario  escriba
- */
+// Its function is to store in the state all the messages that the user writes
 export default async ({ body }: BotContext, { state, }: BotMethods) => {
-    await handleHistory({ content: body, role: 'user' }, state)
+  await handleHistory({ content: body, role: 'user' }, state)
 }

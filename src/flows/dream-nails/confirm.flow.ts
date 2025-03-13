@@ -1,7 +1,7 @@
 import { addKeyword, EVENTS } from "@bot-whatsapp/bot";
-import { getAIResponse } from "../services/ai";
-import { clearHistory, handleHistory, getHistoryParse } from "../utils/handleHistory";
-import { getFullCurrentDate } from "../utils/currentDate";
+import { getAIResponse } from "../../services/ai";
+import { clearHistory, handleHistory, getHistoryParse } from "../../utils/handleHistory";
+import { getFullCurrentDate } from "../../utils/currentDate";
 import { appToCalendar } from "src/services/calendar";
 
 const generatePromptToFormatDate = (history: string) => {
@@ -33,6 +33,22 @@ const createEventJsonPrompt = (info: string) => {
   return prompt
 }
 
+const createConfirmationPrompt = (message) => {
+  const prompt = `
+    Analiza el siguiente mensaje y determina si el usuario está confirmando una cita:
+
+    Mensaje: "${message}"
+
+    Si el mensaje indica confirmación de una cita, responde con "confirmado".
+    Si el mensaje no es una confirmación, responde con "no confirmado".
+    Si el mensaje es ambiguo, responde con "necesita aclaración".
+
+    Respuesta:
+  `;
+  return prompt;
+}
+
+
 // Responsible for requesting the necessary data to register the event in the calendar
 const flowConfirm = addKeyword(EVENTS.ACTION).addAction(async (_, { flowDynamic }) => {
   await flowDynamic('Ok, voy a pedirte unos datos para agendar')
@@ -50,7 +66,7 @@ const flowConfirm = addKeyword(EVENTS.ACTION).addAction(async (_, { flowDynamic 
   .addAction({ capture: true }, async (ctx, { flowDynamic }) => {
     await flowDynamic(`Última pregunta ¿Cuál es tu email?`)
   })
-  .addAction({ capture: true }, async (ctx, { state, flowDynamic }) => {
+  .addAction({ capture: true }, async (ctx, { state, flowDynamic, endFlow }) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const isValidEmail = emailRegex.test(ctx.body);
 
@@ -66,6 +82,7 @@ const flowConfirm = addKeyword(EVENTS.ACTION).addAction(async (_, { flowDynamic 
     await appToCalendar(eventDataJson)
     clearHistory(state)
     await flowDynamic('Listo! agendado. Buen día')
+    endFlow()
   })
 
 export { flowConfirm }

@@ -1,7 +1,7 @@
 import { addKeyword, EVENTS } from "@bot-whatsapp/bot";
-import { generateTimer } from "../utils/generateTimer";
-import { getHistoryParse, handleHistory } from "../utils/handleHistory";
-import { getAIResponse } from "../services/ai";
+import { generateTimer } from "../../utils/generateTimer";
+import { getHistoryParse, handleHistory } from "../../utils/handleHistory";
+import { getAIResponse } from "../../services/ai";
 import { getFullCurrentDate } from "src/utils/currentDate";
 
 const PROMPT_SELLER = `Eres el asistente virtual de Dream Nails, una marca prestigiosa en nail art y estética integral que ofrece servicios profesionales de uñas, cursos y workshops. Tu principal responsabilidad es responder a las consultas de los clientes y ayudarles a agendar citas, reservar servicios o inscribirse en cursos y workshops.
@@ -114,8 +114,6 @@ INSTRUCCIONES:
 
 Respuesta útil:`;
 
-
-
 //? Replace variables at the prompt
 export const generatePromptSeller = (history: string) => {
   const nowDate = getFullCurrentDate()
@@ -127,7 +125,7 @@ const flowSeller = addKeyword(EVENTS.ACTION).addAction(async (_, { state, flowDy
   try {
     const history = getHistoryParse(state) // all conversation customer
     const promptSeller = generatePromptSeller(history)
-
+    console.log('promptSeller', promptSeller)
     const assistantReply = await getAIResponse(promptSeller)
 
     await handleHistory({ content: assistantReply, role: 'assistant' }, state)

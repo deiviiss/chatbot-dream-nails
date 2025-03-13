@@ -1,7 +1,7 @@
 {
-  "name": "chatbot-dream-nails",
+  "name": "chatbot-mi-tienda-en-linea-shop",
   "version": "1.0.0",
-  "description": "chatbot-dream-nails is a chatbot that helps you learn and practice the art of nail art. It provides you with personalized instruction and schedules.",
+  "description": "chatbot-mi-tienda-en-linea is a chatbot that provides information about a mi tienda en linea store and allows users to get information about the plans and services offered by the mi tienda en linea .shop.",
   "type": "module",
   "scripts": {
     "dev": "npx tsx src/app.ts",
